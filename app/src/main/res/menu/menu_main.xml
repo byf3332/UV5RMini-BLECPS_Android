@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.byf3332.uv5rminicps.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_radio_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_vfo"
+        android:orderInCategory="110"
+        android:title="@string/action_vfo_mode"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dtmf"
+        android:orderInCategory="120"
+        android:title="@string/action_dtmf_settings"
+        app:showAsAction="never" />
+</menu>
+

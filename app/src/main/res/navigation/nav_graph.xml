@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FirstFragment">
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.byf3332.uv5rminicps.ChannelsFragment"
+        android:label="@string/title_channels"
+        tools:layout="@layout/fragment_first" />
+
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="com.byf3332.uv5rminicps.RadioSettingsFragment"
+        android:label="@string/title_radio_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/VfoFragment"
+        android:name="com.byf3332.uv5rminicps.VfoFragment"
+        android:label="@string/action_vfo_mode"
+        tools:layout="@layout/fragment_vfo" />
+
+    <fragment
+        android:id="@+id/DtmfFragment"
+        android:name="com.byf3332.uv5rminicps.DtmfFinalFragment"
+        android:label="@string/action_dtmf_settings"
+        tools:layout="@layout/fragment_dtmf" />
+</navigation>
+

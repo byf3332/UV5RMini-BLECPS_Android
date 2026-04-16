@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vfo_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:id="@+id/layout_vfo_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_vfo_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="@string/vfo_empty"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_a"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edit_vfo_a_freq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/vfo_hint_freq_mhz"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_rx_tone" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_rxtone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_tx_tone" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_txtone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_sq_mode" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_sq_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_power" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_power"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_bandwidth" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_bandwidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_step" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_step"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_signal" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_signal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_offset_dir" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_offset_dir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/edit_vfo_a_offset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/vfo_hint_offset_mhz"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_fhss" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_a_fhss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/vfo_b"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edit_vfo_b_freq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/vfo_hint_freq_mhz"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_rx_tone" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_rxtone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_tx_tone" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_txtone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_sq_mode" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_sq_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_power" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_power"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_bandwidth" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_bandwidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_step" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_step"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_signal" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_signal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_offset_dir" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_offset_dir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/edit_vfo_b_offset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/vfo_hint_offset_mhz"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_fhss" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_b_fhss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/vfo_scan_range"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit_vfo_scan_low"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/vfo_scan_low"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/edit_vfo_scan_high"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:hint="@string/vfo_scan_high"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_busy_lock" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_busy_lock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vfo_pttid" />
+
+        <Spinner
+            android:id="@+id/spinner_vfo_pttid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</ScrollView>
+
