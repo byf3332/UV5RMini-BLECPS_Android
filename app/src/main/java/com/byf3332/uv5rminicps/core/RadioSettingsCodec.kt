@@ -35,17 +35,37 @@ object RadioSettingsCodec {
     )
 
     private fun key1ShortOpts(res: Resources): List<String> = listOf(
-        s(res, R.string.rs_key1_reserved_0),
-        s(res, R.string.rs_key1_reserved_1),
-        s(res, R.string.rs_key1_reserved_2),
-        s(res, R.string.rs_key1_reserved_3),
+        s(res, R.string.rs_key1_alarm),
         s(res, R.string.rs_key1_scan),
         s(res, R.string.rs_key1_sweep),
         s(res, R.string.rs_key1_vox),
         s(res, R.string.rs_key1_fm),
         s(res, R.string.rs_key1_flashlight),
-        s(res, R.string.rs_key1_alarm),
     )
+
+    private fun decodeKey1Short(value: Int, res: Resources): String = when (value) {
+        3 -> s(res, R.string.rs_key1_alarm)
+        28 -> s(res, R.string.rs_key1_scan)
+        29 -> s(res, R.string.rs_key1_sweep)
+        45 -> s(res, R.string.rs_key1_vox)
+        7 -> s(res, R.string.rs_key1_fm)
+        8 -> s(res, R.string.rs_key1_flashlight)
+        else -> "RAW($value)"
+    }
+
+    private fun encodeKey1Short(raw: String, res: Resources): Int = when (raw) {
+        s(res, R.string.rs_key1_alarm) -> 3
+        s(res, R.string.rs_key1_scan) -> 28
+        s(res, R.string.rs_key1_sweep) -> 29
+        s(res, R.string.rs_key1_vox) -> 45
+        s(res, R.string.rs_key1_fm) -> 7
+        s(res, R.string.rs_key1_flashlight) -> 8
+        else -> Regex("""-?\d+""").find(raw)?.value?.toIntOrNull() ?: 0
+    }
+
+
+    private fun key1ShortVisibleOpts(res: Resources): List<String> =
+        key1ShortOpts(res)
 
     fun labelForKey(key: String, res: Resources): String = when (key) {
         "sql" -> s(res, R.string.rs_label_sql)
@@ -137,7 +157,7 @@ object RadioSettingsCodec {
         )
         "rpt_tail_clear", "rpt_tail_det" -> (0..10).map { "${it * 100}ms" }
         "dtmf_hangup" -> (3..10).map { "${it}s" }
-        "key1_short" -> key1ShortOpts(res)
+        "key1_short" -> key1ShortVisibleOpts(res)
         else -> emptyList()
     }
 
@@ -205,7 +225,7 @@ object RadioSettingsCodec {
             item("cts_dcs_scan_type", optionsFor("cts_dcs_scan_type", res).getOrElse(ctsScan) { optionsFor("cts_dcs_scan_type", res).first() }),
             item("vfo_scan_range_l", rangeL.toString()),
             item("vfo_scan_range_h", rangeH.toString()),
-            item("key1_short", optionsFor("key1_short", res).getOrElse(key1) { "RAW($key1)" }),
+            item("key1_short", decodeKey1Short(key1, res)),
             item("rst_menu", bool((b[0x37].toInt() and 0xFF) % 2)),
             item("dtmf_hangup", optionsFor("dtmf_hangup", res).getOrElse((b[0x39].toInt() and 0xFF) % 8) { "3s" }),
             item("vox_sw", bool((b[0x3A].toInt() and 0xFF) % 2)),
@@ -276,7 +296,7 @@ object RadioSettingsCodec {
                     b[0x2E] = (v and 0xFF).toByte()
                     b[0x2F] = ((v shr 8) and 0xFF).toByte()
                 }
-                "key1_short" -> b[0x32] = setByOptions("key1_short", raw).coerceIn(0, 255).toByte()
+                "key1_short" -> b[0x32] = encodeKey1Short(raw, res).toByte()
                 "rst_menu" -> b[0x37] = isOn(raw).toByte()
                 "dtmf_hangup" -> b[0x39] = setByOptions("dtmf_hangup", raw).coerceIn(0, 7).toByte()
                 "vox_sw" -> b[0x3A] = isOn(raw).toByte()
@@ -287,4 +307,3 @@ object RadioSettingsCodec {
         return out
     }
 }
-

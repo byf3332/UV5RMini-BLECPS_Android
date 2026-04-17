@@ -29,9 +29,6 @@
 4. 点击“写回设备”
 5. 等待写入完成与手台重启
 
-## TODO
-1. ~~蓝牙设备自动扫描及列表选择~~
-2. 英文翻译
 
 ## 免责声明
 
@@ -68,9 +65,6 @@ This is an experimental Android Bluetooth programming tool for the `Baofeng UV5R
 4. Tap “Write Device”.
 5. Wait for write completion and radio reboot.
 
-## TODO
-1. ~~BLE device scan and selection~~
-2. English localization
 
 
 ## Disclaimer

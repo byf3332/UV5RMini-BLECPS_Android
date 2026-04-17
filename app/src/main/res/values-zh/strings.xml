@@ -1,0 +1,232 @@
+<resources>
+    <!-- App & Navigation -->
+    <string name="app_name" translatable="false">UV5R Mini CPS</string>
+    <string name="title_channels">信道列表</string>
+    <string name="title_radio_settings">手台设置</string>
+    <string name="action_radio_settings">手台设置</string>
+    <string name="action_vfo_mode">VFO模式</string>
+    <string name="action_dtmf_settings">DTMF设置</string>
+
+    <!-- Main Screen -->
+    <string name="hint_mac">设备MAC</string>
+    <string name="label_connected_device">已选择设备</string>
+    <string name="text_device_not_selected">未选择设备（请先扫描）</string>
+    <string name="btn_scan_devices">扫描设备</string>
+    <string name="btn_read_real">读取设备</string>
+    <string name="hint_delete_channel">删除信道号(1-999)</string>
+    <string name="btn_delete">删除</string>
+    <string name="btn_write_real">写回设备</string>
+    <string name="text_not_read">尚未读取设备</string>
+    <string name="channel_table_empty">暂无信道数据，请先读取设备。</string>
+    <string name="settings_empty">暂无设置数据，请先读取设备。</string>
+
+    <!-- Common Actions -->
+    <string name="action_cancel">取消</string>
+    <string name="action_confirm">确定</string>
+    <string name="action_rescan">重新扫描</string>
+    <string name="action_go_to_settings">去设置</string>
+
+    <!-- Toast/Snackbar/Status -->
+    <string name="err_missing_ble_permission">缺少蓝牙权限: %1$s</string>
+    <string name="msg_ble_permission_granted">蓝牙权限已授予</string>
+    <string name="msg_channel_added">已新增信道</string>
+    <string name="summary_not_read">尚未读取设备</string>
+    <string name="summary_enter_mac_first">请先扫描并选择设备</string>
+    <string name="summary_reading">正在读取设备...</string>
+    <string name="summary_reading_progress">读取中: %1$d/%2$d</string>
+    <string name="summary_read_done">读取完成: %1$s</string>
+    <string name="summary_read_failed">读取失败: %1$s</string>
+    <string name="summary_no_channel_to_add">没有可新增信道号</string>
+    <string name="summary_channel_range">信道范围 1-999</string>
+    <string name="summary_read_first">请先读取设备</string>
+    <string name="summary_writing_progress">写入中: %1$d/%2$d</string>
+    <string name="summary_write_done">写回完成</string>
+    <string name="summary_write_failed">写回失败: %1$s</string>
+    <string name="summary_pending_done">待写镜像已生成: %1$s</string>
+    <string name="summary_pending_failed">生成失败: %1$s</string>
+    <string name="status_scanning_devices">正在扫描设备...</string>
+    <string name="status_scanning_count">正在扫描设备... 已发现 %1$d 台</string>
+    <string name="status_scan_done_count">扫描完成，共 %1$d 台设备</string>
+    <string name="msg_no_devices_found">未发现可连接设备</string>
+    <string name="title_select_device">选择设备</string>
+    <string name="device_unknown_name">未知设备</string>
+    <string name="msg_scan_failed">扫描失败: %1$s</string>
+    <string name="title_location_required">需要开启定位服务</string>
+    <string name="msg_location_required_for_scan">当前设备关闭了系统定位服务，请先开启定位服务后再扫描。</string>
+
+    <!-- Channel Table Headers -->
+    <string name="col_channel">信道</string>
+    <string name="col_rx_freq">接收频率</string>
+    <string name="col_rx_tone">接收亚音</string>
+    <string name="col_tx_freq">发射频率</string>
+    <string name="col_tx_tone">发射亚音</string>
+    <string name="col_power">功率</string>
+    <string name="col_bandwidth">带宽</string>
+    <string name="col_scan_add">扫描添加</string>
+    <string name="col_dtmf_decode">DTMF解码</string>
+    <string name="col_sq_mode">静音方式</string>
+    <string name="col_ptt_id">PTT-ID</string>
+    <string name="col_signal">信令码</string>
+    <string name="col_busy_lock">繁忙锁定</string>
+    <string name="col_fhss">跳频</string>
+    <string name="col_channel_name">信道名称</string>
+
+    <!-- Channel Editors -->
+    <string name="title_edit_rx_freq">CH%1$d 接收频率</string>
+    <string name="title_edit_rx_tone">CH%1$d 接收亚音</string>
+    <string name="title_edit_tx_freq">CH%1$d 发射频率</string>
+    <string name="title_edit_tx_tone">CH%1$d 发射亚音</string>
+    <string name="title_edit_power">CH%1$d 功率</string>
+    <string name="title_edit_bandwidth">CH%1$d 带宽</string>
+    <string name="title_edit_scan_add">CH%1$d 扫描添加</string>
+    <string name="title_edit_dtmf_decode">CH%1$d DTMF解码</string>
+    <string name="title_edit_sq_mode">CH%1$d 静音方式</string>
+    <string name="title_edit_ptt_id">CH%1$d PTT-ID</string>
+    <string name="title_edit_signal">CH%1$d 信令码</string>
+    <string name="title_edit_busy_lock">CH%1$d 繁忙锁定</string>
+    <string name="title_edit_fhss">CH%1$d 跳频</string>
+    <string name="title_edit_name">CH%1$d 信道名称</string>
+    <string name="hint_channel_name">Name</string>
+    <string name="err_input_valid_channel">请输入有效信道号</string>
+    <string name="err_freq_allowed_ranges">频率仅允许 [108,174) / [350,390) / [400,520) MHz</string>
+
+    <!-- VFO -->
+    <string name="vfo_empty">暂无VFO数据，请先读取设备。</string>
+    <string name="vfo_a">VFO A</string>
+    <string name="vfo_b">VFO B</string>
+    <string name="vfo_hint_freq_mhz">频率 MHz</string>
+    <string name="vfo_rx_tone">接收亚音</string>
+    <string name="vfo_tx_tone">发射亚音</string>
+    <string name="vfo_sq_mode">静音方式</string>
+    <string name="vfo_power">功率</string>
+    <string name="vfo_bandwidth">带宽</string>
+    <string name="vfo_step">步进频率</string>
+    <string name="vfo_signal">信令编码</string>
+    <string name="vfo_offset_dir">频差方向</string>
+    <string name="vfo_hint_offset_mhz">频差频率 MHz</string>
+    <string name="vfo_fhss">跳频</string>
+    <string name="vfo_scan_range">VFO扫描范围</string>
+    <string name="vfo_scan_low">下限</string>
+    <string name="vfo_scan_high">上限</string>
+    <string name="vfo_busy_lock">繁忙锁定</string>
+    <string name="vfo_pttid">PTT-ID</string>
+    <string name="err_vfo_scan_integer">VFO扫描范围必须是整数频率</string>
+    <string name="err_vfo_scan_low_gt_high">VFO扫描范围下限不能大于上限</string>
+    <string name="err_vfo_scan_bands">VFO扫描范围仅允许 136-174 或 400-520</string>
+    <string name="err_vfo_scan_same_band">VFO扫描上下限必须在同一频段内</string>
+
+    <!-- DTMF -->
+    <string name="dtmf_empty">暂无DTMF数据，请先读取设备。</string>
+    <string name="dtmf_members">DTMF 成员</string>
+    <string name="dtmf_local_and_params">本机ID与参数</string>
+    <string name="dtmf_local_id">本机ID</string>
+    <string name="dtmf_duration">DTMF码持续时间</string>
+    <string name="dtmf_gap">DTMF码间断时间</string>
+    <string name="dtmf_hangup">挂起时长</string>
+    <string name="dtmf_separator">分隔符</string>
+    <string name="dtmf_group_call">组呼码</string>
+    <string name="dtmf_online">上线码</string>
+    <string name="dtmf_offline">下线码</string>
+    <string name="dtmf_col_index">序号</string>
+    <string name="dtmf_col_code">码</string>
+    <string name="dtmf_col_name">名称</string>
+
+    <!-- Radio Settings Labels -->
+    <string name="rs_label_sql">静噪等级</string>
+    <string name="rs_label_save_mode">省电模式</string>
+    <string name="rs_label_vox">VOX等级</string>
+    <string name="rs_label_backlight">背光时间</string>
+    <string name="rs_label_dual_standby">双守功能</string>
+    <string name="rs_label_tot">发射超时</string>
+    <string name="rs_label_beep">按键提示音</string>
+    <string name="rs_label_voice">语音提示</string>
+    <string name="rs_label_language">语言</string>
+    <string name="rs_label_side_tone">侧音开关</string>
+    <string name="rs_label_scan_mode">扫描模式</string>
+    <string name="rs_label_vfo_pttid">PTT-ID</string>
+    <string name="rs_label_ptt_delay">发码延迟</string>
+    <string name="rs_label_ch_a_display_type">A段显示方式</string>
+    <string name="rs_label_ch_b_display_type">B段显示方式</string>
+    <string name="rs_label_vfo_busy_lock">繁忙锁定</string>
+    <string name="rs_label_auto_lock">自动锁定</string>
+    <string name="rs_label_alarm_mode">报警模式</string>
+    <string name="rs_label_alarm_tone">本机报警音</string>
+    <string name="rs_label_tail_clear">尾音消除</string>
+    <string name="rs_label_rpt_tail_clear">中继尾音消除</string>
+    <string name="rs_label_rpt_tail_det">中继尾音延迟</string>
+    <string name="rs_label_roger">Roger提示音</string>
+    <string name="rs_label_fm_enable">FM收音机</string>
+    <string name="rs_label_ch_a_workmode">A段工作方式</string>
+    <string name="rs_label_ch_b_workmode">B段工作方式</string>
+    <string name="rs_label_key_lock">键盘锁定</string>
+    <string name="rs_label_power_on_display_type">开机显示方式</string>
+    <string name="rs_label_tone">中继导频</string>
+    <string name="rs_label_vox_delay_time">VOX延迟时间</string>
+    <string name="rs_label_menu_quit_time">菜单自动退出</string>
+    <string name="rs_label_tot_alarm">发射超时预警</string>
+    <string name="rs_label_cts_dcs_scan_type">亚音扫描方式</string>
+    <string name="rs_label_vfo_scan_range_l">VFO扫描下限</string>
+    <string name="rs_label_vfo_scan_range_h">VFO扫描上限</string>
+    <string name="rs_label_key1_short">侧键短按功能</string>
+    <string name="rs_label_rst_menu">复位菜单使能</string>
+    <string name="rs_label_dtmf_hangup">挂起时长</string>
+    <string name="rs_label_vox_sw">VOX开关</string>
+
+    <!-- Radio Settings Options -->
+    <string name="rs_side_tone_key">按键侧音</string>
+    <string name="rs_side_tone_id">身份码侧音</string>
+    <string name="rs_side_tone_key_id">按键+身份码</string>
+    <string name="rs_display_name">信道名称</string>
+    <string name="rs_display_freq">信道频率</string>
+    <string name="rs_display_channel_no">信道号</string>
+    <string name="rs_backlight_always">常亮</string>
+    <string name="rs_language_english">English</string>
+    <string name="rs_language_chinese">中文</string>
+    <string name="rs_scan_mode_time">时间扫描</string>
+    <string name="rs_scan_mode_carrier">载波扫描</string>
+    <string name="rs_scan_mode_search">搜索扫描</string>
+    <string name="rs_alarm_mode_site">现场报警</string>
+    <string name="rs_alarm_mode_tone">发射报警音</string>
+    <string name="rs_alarm_mode_code">发射报警码</string>
+    <string name="rs_workmode_channel">信道模式</string>
+    <string name="rs_workmode_vfo">频率模式</string>
+    <string name="rs_power_on_logo">LOGO</string>
+    <string name="rs_power_on_voltage">电池电压</string>
+    <string name="rs_cts_scan_all">全部</string>
+    <string name="rs_cts_scan_rx">接收</string>
+    <string name="rs_cts_scan_tx">发射</string>
+    <string name="rs_key1_reserved_0">保留0</string>
+    <string name="rs_key1_reserved_1">保留1</string>
+    <string name="rs_key1_reserved_2">保留2</string>
+    <string name="rs_key1_reserved_3">保留3</string>
+    <string name="rs_key1_scan">扫描</string>
+    <string name="rs_key1_sweep">扫频</string>
+    <string name="rs_key1_vox">声控</string>
+    <string name="rs_key1_fm">收音机</string>
+    <string name="rs_key1_flashlight">手电筒</string>
+    <string name="rs_key1_alarm">报警</string>
+
+    <!-- Tone & Option Values -->
+    <string name="tone_manual_ctcss">手动输入CTCSS...</string>
+    <string name="ctcss_input_title">输入CTCSS</string>
+    <string name="ctcss_input_hint_range">60.0 - 260.0</string>
+    <string name="hint_ctcss_example">例如 88.5</string>
+    <string name="title_manual_ctcss">%1$s (60.0-260.0Hz)</string>
+    <string name="err_ctcss_range">CTCSS必须在60.0到260.0Hz之间</string>
+    <string name="option_off">关</string>
+    <string name="option_on">开</string>
+    <string name="option_none">无</string>
+    <string name="option_power_high">高</string>
+    <string name="option_power_low">低</string>
+    <string name="option_bandwidth_wide">宽</string>
+    <string name="option_bandwidth_narrow">窄</string>
+    <string name="option_ptt_off">关闭</string>
+    <string name="option_ptt_press">按下PTT</string>
+    <string name="option_ptt_release">松开PTT</string>
+    <string name="option_ptt_press_release">按下+松开</string>
+    <string name="option_ptt_press_release_full">按下和松开PTT</string>
+
+    <!-- Legacy Template Strings (kept for compatibility) -->
+    <string name="previous">Previous</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+</resources>
