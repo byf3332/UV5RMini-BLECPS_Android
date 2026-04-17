@@ -29,6 +29,8 @@
 4. 点击“写回设备”
 5. 等待写入完成与手台重启
 
+## 待办事项
+- [ ] 支持CSV导入/导出信道列表。
 
 ## 免责声明
 
@@ -64,6 +66,10 @@ This is an experimental Android Bluetooth programming tool for the `Baofeng UV5R
 3. Edit parameters in Channel List / VFO / Radio Settings / DTMF pages.
 4. Tap “Write Device”.
 5. Wait for write completion and radio reboot.
+
+## TODO
+
+- [ ] Add suooprt for importing/xporting channel list in CSV format.
 
 
 
