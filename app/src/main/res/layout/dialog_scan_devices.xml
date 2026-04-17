@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/layout_scan_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/progress_scan_devices"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:indeterminate="true" />
+
+        <TextView
+            android:id="@+id/text_scan_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/status_scanning_devices"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_scan_devices"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_marginTop="12dp"
+        android:choiceMode="singleChoice" />
+
+</LinearLayout>
