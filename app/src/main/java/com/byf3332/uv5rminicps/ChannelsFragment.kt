@@ -1,33 +1,48 @@
 package com.byf3332.uv5rminicps
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.byf3332.uv5rminicps.ble.Uv5rminiBleClient
 import com.byf3332.uv5rminicps.core.Channel
 import com.byf3332.uv5rminicps.databinding.FragmentFirstBinding
 import kotlin.math.floor
+import kotlinx.coroutines.launch
+import android.provider.Settings
 import java.util.Locale
 
 class ChannelsFragment : Fragment() {
     private companion object {
         const val PREFS_NAME = "device"
         const val KEY_LAST_MAC = "last_mac"
+        const val KEY_LAST_DEVICE_DISPLAY = "last_device_display"
     }
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
     private val vm: CpsViewModel by activityViewModels()
+    private val bleClient by lazy { Uv5rminiBleClient(requireContext().applicationContext) }
 
     private val toneOptions: List<String> by lazy { buildToneOptions() }
     private val powerOptions = listOf("high", "low")
@@ -50,6 +65,28 @@ class ChannelsFragment : Fragment() {
     private val fixedColumnWidthDp = 56
     private val bodyColumnWidthsDp = listOf(150, 150, 150, 150, 110, 110, 120, 120, 160, 130, 110, 120, 90, 200)
     private var syncingVertical = false
+    private var scanningDevices = false
+    private val macRegex = Regex("([0-9A-Fa-f]{2}(?::[0-9A-Fa-f]{2}){5})")
+    private var pendingScanPrefs: android.content.SharedPreferences? = null
+    private val scanPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { result ->
+        val denied = result.filterValues { !it }.keys
+        if (denied.isNotEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.err_missing_ble_permission, denied.joinToString()),
+                Toast.LENGTH_LONG
+            ).show()
+            pendingScanPrefs = null
+            return@registerForActivityResult
+        }
+        val prefs = pendingScanPrefs
+        pendingScanPrefs = null
+        if (prefs != null) {
+            scanAndSelectDevice(prefs)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,8 +100,11 @@ class ChannelsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val prefs = requireContext().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE)
+        val savedDisplay = prefs.getString(KEY_LAST_DEVICE_DISPLAY, "") ?: ""
         val savedMac = prefs.getString(KEY_LAST_MAC, "") ?: ""
-        if (binding.editMacAddress.text.isNullOrBlank()) {
+        if (savedDisplay.isNotBlank()) {
+            binding.editMacAddress.setText(savedDisplay)
+        } else if (savedMac.isNotBlank()) {
             binding.editMacAddress.setText(savedMac)
         }
         vm.summary.observe(viewLifecycleOwner) { binding.textStatus.text = it }
@@ -87,11 +127,17 @@ class ChannelsFragment : Fragment() {
             binding.buttonReadReal.isEnabled = !busy
             binding.buttonDeleteChannel.isEnabled = !busy
             binding.buttonWriteReal.isEnabled = !busy
+            binding.buttonScanDevices.isEnabled = !busy && !scanningDevices
         }
 
+        binding.buttonScanDevices.setOnClickListener {
+            if (ensureScanPermissions(prefs)) {
+                scanAndSelectDevice(prefs)
+            }
+        }
         binding.buttonReadReal.setOnClickListener {
-            val mac = binding.editMacAddress.text.toString().trim()
-            prefs.edit().putString(KEY_LAST_MAC, mac).apply()
+            val mac = resolveMacAddressFromInput()
+            persistSelectedDevice(prefs, mac, binding.editMacAddress.text.toString())
             vm.readFromDevice(mac)
         }
         binding.buttonDeleteChannel.setOnClickListener {
@@ -103,8 +149,8 @@ class ChannelsFragment : Fragment() {
             }
         }
         binding.buttonWriteReal.setOnClickListener {
-            val mac = binding.editMacAddress.text.toString().trim()
-            prefs.edit().putString(KEY_LAST_MAC, mac).apply()
+            val mac = resolveMacAddressFromInput()
+            persistSelectedDevice(prefs, mac, binding.editMacAddress.text.toString())
             vm.writeToDevice(mac)
         }
     }
@@ -441,6 +487,163 @@ class ChannelsFragment : Fragment() {
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()
+    }
+
+    private fun scanAndSelectDevice(prefs: android.content.SharedPreferences) {
+        if (scanningDevices) return
+        if (!isLocationServiceEnabled()) {
+            showEnableLocationDialog()
+            return
+        }
+        val dialogView = layoutInflater.inflate(R.layout.dialog_scan_devices, null)
+        val listView = dialogView.findViewById<ListView>(R.id.list_scan_devices)
+        val progressBar = dialogView.findViewById<ProgressBar>(R.id.progress_scan_devices)
+        val statusText = dialogView.findViewById<TextView>(R.id.text_scan_status)
+
+        val labels = mutableListOf<String>()
+        var foundDevices: List<Uv5rminiBleClient.ScannedDevice> = emptyList()
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, labels)
+        listView.adapter = adapter
+
+        var scanJob: kotlinx.coroutines.Job? = null
+
+        fun startScan() {
+            scanJob?.cancel()
+            scanningDevices = true
+            binding.buttonScanDevices.isEnabled = false
+            labels.clear()
+            adapter.notifyDataSetChanged()
+            foundDevices = emptyList()
+            progressBar.visibility = View.VISIBLE
+            statusText.text = getString(R.string.status_scanning_devices)
+
+            scanJob = lifecycleScope.launch {
+                try {
+                    val result = bleClient.scanDevices(durationMs = 30_000L) { updates ->
+                        foundDevices = updates
+                        labels.clear()
+                        labels.addAll(updates.map { formatDeviceDisplay(it) })
+                        adapter.notifyDataSetChanged()
+                        statusText.text = getString(R.string.status_scanning_count, updates.size)
+                    }
+                    foundDevices = result
+                    if (result.isEmpty()) {
+                        statusText.text = getString(R.string.msg_no_devices_found)
+                    } else {
+                        statusText.text = getString(R.string.status_scan_done_count, result.size)
+                    }
+                } catch (_: kotlinx.coroutines.CancellationException) {
+                    // ignored
+                } catch (t: Throwable) {
+                    statusText.text = getString(R.string.msg_scan_failed, (t.message ?: t.javaClass.simpleName))
+                } finally {
+                    progressBar.visibility = View.GONE
+                    scanningDevices = false
+                    val busy = vm.busy.value ?: false
+                    binding.buttonScanDevices.isEnabled = !busy
+                }
+            }
+        }
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.title_select_device))
+            .setView(dialogView)
+            .setNeutralButton(getString(R.string.action_rescan), null)
+            .setNegativeButton(getString(R.string.action_cancel), null)
+            .create()
+
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val selected = foundDevices.getOrNull(position) ?: return@setOnItemClickListener
+            val display = formatDeviceDisplayLine(selected)
+            binding.editMacAddress.setText(display)
+            persistSelectedDevice(prefs, selected.address, display)
+            dialog.dismiss()
+        }
+
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL)?.setOnClickListener {
+                startScan()
+            }
+        }
+        dialog.setOnDismissListener {
+            scanJob?.cancel()
+            scanningDevices = false
+            val busy = vm.busy.value ?: false
+            binding.buttonScanDevices.isEnabled = !busy
+        }
+
+        dialog.show()
+        startScan()
+    }
+
+    private fun resolveMacAddressFromInput(): String {
+        val raw = binding.editMacAddress.text.toString().trim()
+        val matched = macRegex.find(raw)?.groupValues?.getOrNull(1)
+        return matched?.uppercase(Locale.US).orEmpty()
+    }
+
+    private fun persistSelectedDevice(
+        prefs: android.content.SharedPreferences,
+        mac: String,
+        displayText: String,
+    ) {
+        if (mac.isBlank()) return
+        val display = displayText.trim().ifBlank { mac }
+        prefs.edit()
+            .putString(KEY_LAST_MAC, mac)
+            .putString(KEY_LAST_DEVICE_DISPLAY, display)
+            .apply()
+    }
+
+    private fun isLocationServiceEnabled(): Boolean {
+        val lm = requireContext().getSystemService(LocationManager::class.java) ?: return false
+        return lm.isLocationEnabled
+    }
+
+    private fun ensureScanPermissions(prefs: android.content.SharedPreferences): Boolean {
+        val perms = requiredScanPermissions()
+        val missing = perms.filter {
+            ContextCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED
+        }
+        if (missing.isEmpty()) return true
+        pendingScanPrefs = prefs
+        scanPermissionLauncher.launch(missing.toTypedArray())
+        return false
+    }
+
+    private fun requiredScanPermissions(): List<String> {
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            listOf(
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            )
+        } else {
+            listOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private fun showEnableLocationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.title_location_required))
+            .setMessage(getString(R.string.msg_location_required_for_scan))
+            .setNegativeButton(getString(R.string.action_cancel), null)
+            .setPositiveButton(getString(R.string.action_go_to_settings)) { _, _ ->
+                runCatching {
+                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                }
+            }
+            .show()
+    }
+
+    private fun formatDeviceDisplay(device: Uv5rminiBleClient.ScannedDevice): String {
+        val name = device.name?.takeIf { it.isNotBlank() } ?: getString(R.string.device_unknown_name)
+        return "$name\n${device.address}  RSSI ${device.rssi}"
+    }
+
+    private fun formatDeviceDisplayLine(device: Uv5rminiBleClient.ScannedDevice): String {
+        val name = device.name?.takeIf { it.isNotBlank() } ?: getString(R.string.device_unknown_name)
+        return "$name (${device.address})"
     }
 
     override fun onDestroyView() {

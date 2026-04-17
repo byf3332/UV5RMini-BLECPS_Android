@@ -9,8 +9,13 @@ import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothManager
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +53,12 @@ object Uv5rminiBleSpec {
  * Mirrors the validated Python transaction flow.
  */
 class Uv5rminiBleClient(private val context: Context) {
+    data class ScannedDevice(
+        val address: String,
+        val name: String?,
+        val rssi: Int,
+    )
+
     data class ReadResult(
         val bannerHex: String,
         val featuresHex: String,
@@ -102,6 +113,61 @@ class Uv5rminiBleClient(private val context: Context) {
         } finally {
             session.stop()
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    suspend fun scanDevices(
+        durationMs: Long = 5_000L,
+        onUpdate: ((List<ScannedDevice>) -> Unit)? = null,
+    ): List<ScannedDevice> = withContext(Dispatchers.Main) {
+        val manager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val adapter: BluetoothAdapter = manager.adapter ?: error("Bluetooth adapter unavailable")
+        if (!adapter.isEnabled) error("Bluetooth disabled")
+        val scanner = adapter.bluetoothLeScanner ?: error("BLE scanner unavailable")
+        val mainHandler = Handler(Looper.getMainLooper())
+
+        val found = linkedMapOf<String, ScannedDevice>()
+        fun emitSnapshot() {
+            val snapshot = found.values.sortedByDescending { it.rssi }
+            if (onUpdate != null) {
+                mainHandler.post { onUpdate.invoke(snapshot) }
+            }
+        }
+        val callback = object : ScanCallback() {
+            override fun onScanResult(callbackType: Int, result: ScanResult) {
+                val device = result.device ?: return
+                val address = device.address ?: return
+                val name = result.scanRecord?.deviceName ?: runCatching { device.name }.getOrNull()
+                if (name.isNullOrBlank()) return
+                val rssi = result.rssi
+                val current = found[address]
+                if (current == null || rssi > current.rssi) {
+                    found[address] = ScannedDevice(
+                        address = address,
+                        name = name,
+                        rssi = rssi,
+                    )
+                    emitSnapshot()
+                }
+            }
+
+            override fun onBatchScanResults(results: MutableList<ScanResult>) {
+                results.forEach { onScanResult(ScanSettings.CALLBACK_TYPE_ALL_MATCHES, it) }
+            }
+        }
+
+        val filters = emptyList<android.bluetooth.le.ScanFilter>()
+        val settings = ScanSettings.Builder()
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .build()
+
+        try {
+            scanner.startScan(filters, settings, callback)
+            delay(durationMs)
+        } finally {
+            runCatching { scanner.stopScan(callback) }
+        }
+        found.values.sortedByDescending { it.rssi }
     }
 }
 

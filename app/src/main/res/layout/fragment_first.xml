@@ -12,12 +12,39 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <EditText
+        <TextView
+            android:id="@+id/text_connected_device_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_connected_device"
+            android:textColor="#666666"
+            android:textSize="12sp" />
+
+        <TextView
             android:id="@+id/edit_mac_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_mac"
-            android:inputType="textCapCharacters" />
+            android:layout_marginTop="4dp"
+            android:background="?attr/editTextBackground"
+            android:paddingStart="12dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="14dp"
+            android:text="@string/text_device_not_selected"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_scan_devices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_scan_devices" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

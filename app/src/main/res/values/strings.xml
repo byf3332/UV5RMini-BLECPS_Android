@@ -9,6 +9,9 @@
 
     <!-- Main Screen -->
     <string name="hint_mac">设备MAC</string>
+    <string name="label_connected_device">已选择设备</string>
+    <string name="text_device_not_selected">未选择设备（请先扫描）</string>
+    <string name="btn_scan_devices">扫描设备</string>
     <string name="btn_read_real">读取设备</string>
     <string name="hint_delete_channel">删除信道号(1-999)</string>
     <string name="btn_delete">删除</string>
@@ -20,13 +23,15 @@
     <!-- Common Actions -->
     <string name="action_cancel">取消</string>
     <string name="action_confirm">确定</string>
+    <string name="action_rescan">重新扫描</string>
+    <string name="action_go_to_settings">去设置</string>
 
     <!-- Toast/Snackbar/Status -->
     <string name="err_missing_ble_permission">缺少蓝牙权限: %1$s</string>
     <string name="msg_ble_permission_granted">蓝牙权限已授予</string>
     <string name="msg_channel_added">已新增信道</string>
     <string name="summary_not_read">尚未读取设备</string>
-    <string name="summary_enter_mac_first">请先输入设备 MAC</string>
+    <string name="summary_enter_mac_first">请先扫描并选择设备</string>
     <string name="summary_reading">正在读取设备...</string>
     <string name="summary_reading_progress">读取中: %1$d/%2$d</string>
     <string name="summary_read_done">读取完成: %1$s</string>
@@ -39,6 +44,15 @@
     <string name="summary_write_failed">写回失败: %1$s</string>
     <string name="summary_pending_done">待写镜像已生成: %1$s</string>
     <string name="summary_pending_failed">生成失败: %1$s</string>
+    <string name="status_scanning_devices">正在扫描设备...</string>
+    <string name="status_scanning_count">正在扫描设备... 已发现 %1$d 台</string>
+    <string name="status_scan_done_count">扫描完成，共 %1$d 台设备</string>
+    <string name="msg_no_devices_found">未发现可连接设备</string>
+    <string name="title_select_device">选择设备</string>
+    <string name="device_unknown_name">未知设备</string>
+    <string name="msg_scan_failed">扫描失败: %1$s</string>
+    <string name="title_location_required">需要开启定位服务</string>
+    <string name="msg_location_required_for_scan">当前设备关闭了系统定位服务，请先开启定位服务后再扫描。</string>
 
     <!-- Channel Table Headers -->
     <string name="col_channel">信道</string>
@@ -74,7 +88,7 @@
     <string name="title_edit_name">CH%1$d 信道名称</string>
     <string name="hint_channel_name">Name</string>
     <string name="err_input_valid_channel">请输入有效信道号</string>
-    <string name="err_freq_allowed_ranges">频率仅允许 [108,174) / [350,390) / [400,520) MHz（最低步进2.5KHz）</string>
+    <string name="err_freq_allowed_ranges">频率仅允许 [108,174) / [350,390) / [400,520) MHz</string>
 
     <!-- VFO -->
     <string name="vfo_empty">暂无VFO数据，请先读取设备。</string>
