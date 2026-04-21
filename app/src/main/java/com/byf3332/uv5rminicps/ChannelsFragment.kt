@@ -231,7 +231,12 @@ class ChannelsFragment : Fragment() {
                     Toast.makeText(requireContext(), getString(R.string.err_freq_allowed_ranges), Toast.LENGTH_SHORT).show()
                     return@showInputEditor
                 }
-                vm.updateChannel(ch.channel, ch.copy(rxFreqMhz = freq))
+                val patch = if (ch.txFreqMhz == null) {
+                    ch.copy(rxFreqMhz = freq, txFreqMhz = freq)
+                } else {
+                    ch.copy(rxFreqMhz = freq)
+                }
+                vm.updateChannel(ch.channel, patch)
             }
         })
         row.addView(makeCell(bestToneValue(ch.rxTone), 150, clickable = true) {
@@ -246,7 +251,12 @@ class ChannelsFragment : Fragment() {
                     Toast.makeText(requireContext(), getString(R.string.err_freq_allowed_ranges), Toast.LENGTH_SHORT).show()
                     return@showInputEditor
                 }
-                vm.updateChannel(ch.channel, ch.copy(txFreqMhz = freq))
+                val patch = if (ch.rxFreqMhz == null) {
+                    ch.copy(txFreqMhz = freq, rxFreqMhz = freq)
+                } else {
+                    ch.copy(txFreqMhz = freq)
+                }
+                vm.updateChannel(ch.channel, patch)
             }
         })
         row.addView(makeCell(bestToneValue(ch.txTone), 150, clickable = true) {
